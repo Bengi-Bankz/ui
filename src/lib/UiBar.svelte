@@ -1,15 +1,17 @@
 <script lang="ts">
     import BetControl from "./BetControl.svelte";
+    import MenuModal from "./MenuModal.svelte";
     export let onAction: () => void;
     export let gamestate: string;
     export let bet: number = 1.0;
     export let onBetChange: (
         e: CustomEvent<{ bet: number }>,
     ) => void = () => {};
+    let menuOpen = false; // Merged menuOpen state
 </script>
 
 <div class="ui-bar">
-    <button class="menu-btn" aria-label="Open menu">
+    <button class="menu-btn" aria-label="Open menu" on:click={() => menuOpen = true}>
         <!-- Hamburger Icon -->
         <svg
             width="28"
@@ -54,8 +56,11 @@
             <polygon points="11,8 21,14 11,20" fill="#222" />
         </svg>
     </button>
-    <slot></slot>
 </div>
+
+<MenuModal open={menuOpen} on:close={() => menuOpen = false} />
+
+<slot></slot>
 
 <style>
     .ui-bar {
