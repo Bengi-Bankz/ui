@@ -28,17 +28,34 @@ onMount(() => {
 <style>
 .pixi-left-panel {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
-  padding: 24px;
+  width: 100vw;
+  padding: 0;
+  box-sizing: border-box;
 }
 .pixi-canvas {
-  width: 320px;
-  height: 320px;
+  width: 90vw;
+  max-width: 420px;
+  height: 90vw;
+  max-height: 420px;
+  aspect-ratio: 1 / 1;
   background: #b3d8f7;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   overflow: hidden;
+}
+@media (max-width: 600px) {
+  .pixi-canvas {
+    width: 98vw;
+    height: 98vw;
+    max-width: 100vw;
+    max-height: 100vw;
+    border-radius: 8px;
+  }
+  .pixi-left-panel {
+    padding: 0;
+  }
 }
 </style>
