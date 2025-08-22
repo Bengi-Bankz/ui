@@ -83,10 +83,10 @@
         aria-label="Close bet selector"
         on:click={() => (showSelector = false)}
         on:keydown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') showSelector = false;
+            if (e.key === "Enter" || e.key === " ") showSelector = false;
         }}
     >
-    <div class="bet-selector">
+        <div class="bet-selector">
             {#each betSteps as step, idx}
                 <button
                     class:active={idx === betIndex}
