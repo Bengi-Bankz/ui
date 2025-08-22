@@ -1,11 +1,15 @@
 <script lang="ts">
     import { onMount } from "svelte";
+
     import UiBar from "./UiBar.svelte";
+    import { apiState } from "./apiState";
 
     const API_MULTIPLIER = 1000000;
     let gamestate = $state("rest");
-    let response: object | null = $state(null);
-    let endRoundResponse: object | null = $state(null);
+
+    import { get } from "svelte/store";
+
+    // Remove local response state, use store instead
     let balance = $state(1000);
     let lastWin = $state(0);
     let bet = $state(1.0);
@@ -48,16 +52,16 @@
                 typeof confirmation.balance.amount === "number"
             ) {
                 balance = confirmation.balance.amount / API_MULTIPLIER;
-                endRoundResponse = confirmation;
+                apiState.update((state) => ({ ...state }));
                 gamestate = "rest";
             } else {
                 // Invalid response, reset state
-                endRoundResponse = confirmation;
+                apiState.update((state) => ({ ...state }));
                 gamestate = "rest";
             }
         } catch (e) {
             // Network or unexpected error
-            endRoundResponse = { error: e };
+            apiState.update((state) => ({ ...state }));
             gamestate = "rest";
         }
     };
@@ -69,7 +73,6 @@
                     alert(
                         "Insufficient balance. Please deposit or try a lower bet.",
                     );
-                    // Optionally refresh wallet here if needed
                     return;
                 }
                 balance -= bet;
@@ -81,8 +84,8 @@
                 sessionID: getParam("sessionID"),
                 amount: bet * API_MULTIPLIER,
             });
-            endRoundResponse = null;
-            response = resp;
+            apiState.update((state) => ({ ...state, playResponse: resp }));
+            // (endRoundResponse is now handled in store)
             if (
                 resp &&
                 resp.round &&
@@ -103,13 +106,12 @@
                 gamestate = "rest";
                 lastWin = 0;
             }
-            console.log(lastWin);
-            if (resp && resp.round) {
-                console.log(resp.round.state);
-            }
         } catch (e) {
             // Network or unexpected error
-            response = { error: e };
+            apiState.update((state) => ({
+                ...state,
+                playResponse: { error: e },
+            }));
             gamestate = "rest";
             lastWin = 0;
         }
@@ -128,18 +130,6 @@
         onBetChange={handleBetChange}
         onAction={gamestate === "rest" ? getBookResponse : endRound}
     />
-
-    <div class="json-stack">
-        <h3>play/ response</h3>
-        <div class="bet-display">
-            <pre>{JSON.stringify(response, null, 2)}</pre>
-        </div>
-
-        <h3>end-round/ response</h3>
-        <div class="end-display">
-            <pre>{JSON.stringify(endRoundResponse, null, 2)}</pre>
-        </div>
-    </div>
 </div>
 
 <style>
