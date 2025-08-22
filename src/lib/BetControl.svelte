@@ -76,8 +76,17 @@
 </div>
 
 {#if showSelector}
-    <div class="bet-selector-modal" on:click={() => (showSelector = false)}>
-        <div class="bet-selector" on:click|stopPropagation>
+    <div
+        class="bet-selector-modal"
+        role="button"
+        tabindex="0"
+        aria-label="Close bet selector"
+        on:click={() => (showSelector = false)}
+        on:keydown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') showSelector = false;
+        }}
+    >
+    <div class="bet-selector">
             {#each betSteps as step, idx}
                 <button
                     class:active={idx === betIndex}

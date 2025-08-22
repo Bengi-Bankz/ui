@@ -23,7 +23,7 @@
             <rect x="5" y="18" width="18" height="2.5" rx="1.2" fill="#fff" />
         </svg>
     </button>
-    <div class="bet-control-wrapper">
+    <div class="bet-control-wrapper" role="group" aria-label="Bet amount controls">
         <BetControl value={bet} on:change={onBetChange} />
     </div>
     <button
