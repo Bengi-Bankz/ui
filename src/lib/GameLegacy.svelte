@@ -65,7 +65,15 @@
     async function getBookResponse() {
         try {
             if (gamestate == "rest") {
+                if (balance < bet) {
+                    alert(
+                        "Insufficient balance. Please deposit or try a lower bet.",
+                    );
+                    // Optionally refresh wallet here if needed
+                    return;
+                }
                 balance -= bet;
+                if (balance < 0) balance = 0;
             }
             const resp = await getRGSResponse("/wallet/play", {
                 mode: getParam("mode") ?? "BASE",
@@ -109,7 +117,7 @@
 </script>
 
 <div class="game-wrapper">
-    <div class="balance-display">${balance.toFixed(2)}</div>
+    <div class="balance-display">{Math.max(0, balance).toFixed(2)}</div>
     <div class="game-content">
         <h2>Round Win: ${lastWin}</h2>
     </div>
