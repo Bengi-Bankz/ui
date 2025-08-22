@@ -11,7 +11,11 @@
 </script>
 
 <div class="ui-bar">
-    <button class="menu-btn" aria-label="Open menu" on:click={() => menuOpen = true}>
+    <button
+        class="menu-btn"
+        aria-label="Open menu"
+        on:click={() => (menuOpen = true)}
+    >
         <!-- Hamburger Icon -->
         <svg
             width="28"
@@ -58,7 +62,7 @@
     </button>
 </div>
 
-<MenuModal open={menuOpen} on:close={() => menuOpen = false} />
+<MenuModal open={menuOpen} on:close={() => (menuOpen = false)} />
 
 <slot></slot>
 
